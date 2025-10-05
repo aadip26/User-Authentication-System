@@ -39,9 +39,16 @@ router.post('/register', [
       { expiresIn: '24h' }
     );
 
+    // Set token as HTTP cookie
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
-      token,
       user: {
         id: user._id,
         email: user.email,
@@ -89,9 +96,16 @@ router.post('/login', [
       { expiresIn: '24h' }
     );
 
+    // Set token as HTTP cookie
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
     res.json({
       message: 'Login successful',
-      token,
       user: {
         id: user._id,
         email: user.email,
@@ -117,6 +131,23 @@ router.get('/profile', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Profile error:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Logout
+router.post('/logout', (req, res) => {
+  try {
+    // Clear the auth cookie
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+    
+    res.json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Server error during logout' });
   }
 });
 
