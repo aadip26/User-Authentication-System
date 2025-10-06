@@ -132,3 +132,4 @@ node scripts/createAdmin.js
 - ✅ Cookie-based session management
 
 **Perfect for showcasing MERN stack development skills!** 🚀
+

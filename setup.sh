@@ -53,3 +53,4 @@ echo "   Frontend: http://localhost:3000"
 echo "   Backend: http://localhost:5000"
 echo ""
 echo "📚 For detailed instructions, see README.md"
+
